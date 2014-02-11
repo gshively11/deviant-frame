@@ -1,0 +1,26 @@
+{
+  "name": "deviant-frame",
+  "version": "0.0.0",
+  "description": "Deviant Art Picture Frame",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hustle11/deviant-frame.git"
+  },
+  "author": "Grant Shively",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/hustle11/deviant-frame/issues"
+  },
+  "homepage": "https://github.com/hustle11/deviant-frame",
+  "dependencies": {
+  	"express": "3.x",
+  	"request": "2.x",
+  	"xml2js": "0.4.1",
+  	"feedparser": "0.16.5",
+  	"promise": "4.0.0"
+  }
+}
