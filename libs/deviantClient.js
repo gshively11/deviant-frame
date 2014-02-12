@@ -2,36 +2,58 @@ var request = require('request');
 var xml2js = require('xml2js');
 var FeedParser = require('feedparser');
 var Promise = require('promise');
+var _ = require('underscore');
 
 function DeviantClient(config) {
 	this.config = config;
 }
 
 DeviantClient.prototype.popular = function() {
-	var url = this.config.baseUrl + '&q=boost%3Apopular';
-	console.log('Getting URL: ' + url);
-	return new Promise(function(resolve, reject){
-		request.get(url, function(error, response, body){
-			if(error) return reject(error);
-			xml2js.parseString(body, function(error, result){
-				if(error) return reject(error);
-				resolve(result);
-			});
-		});	
-	});
-}
+	return this.query('boost%3Apopular');
+};
 
-DeviantClient.prototype.test = function(){
-	var url = this.config.baseUrl + '&q=by%3Aspyed+sort%3Atime+meta%3Aall';
+DeviantClient.prototype.popularInCategory = function(category) {
+	return this.query('boost%3Apopular+in%3A' + category);
+};
+
+DeviantClient.prototype.user = function(user) {
+	return this.query('gallery%3A' + user);
+};
+
+DeviantClient.prototype.query = function(query) {
+	var url = this.config.baseUrl + '&q=' + query;
+	console.log('Getting URL: ' + url);
+	var feedMeta;
+	var images = [];
 	return new Promise(function(resolve, reject){
-		request.get(url, function(error, response, body){
-			if(error) return reject(error);
-			xml2js.parseString(body, function(error, result){
-				if(error) return reject(error);
-				resolve(result);
+		request.get(url).pipe(new FeedParser())
+			.on('error', function(error){
+				reject(error);
+			})
+			.on('meta', function(meta){
+				feedMeta = meta;
+			})
+			.on('readable', function(){
+				var stream = this
+					, item;
+				while(item = stream.read()) {
+					var mediaContent = item['media:content'];
+					var image = {
+						title: item.title,
+						url: (mediaContent 
+							&& mediaContent.hasOwnProperty('@') 
+							&& mediaContent['@'].hasOwnProperty('url'))
+								? mediaContent['@']['url']
+								: null
+					};
+					if(image.url != null)
+						images.push(image);
+				}
+			})
+			.on('end', function(){
+				resolve(images);
 			});
-		});	
 	});
-}
+};
 
 module.exports = DeviantClient;

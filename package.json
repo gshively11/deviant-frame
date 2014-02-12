@@ -21,6 +21,7 @@
   	"request": "2.x",
   	"xml2js": "0.4.1",
   	"feedparser": "0.16.5",
-  	"promise": "4.0.0"
+  	"promise": "4.0.0",
+    "underscore": "1.6.0"
   }
 }
