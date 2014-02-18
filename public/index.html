@@ -1,0 +1,26 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<div>
+			Deviant Art Popular Images
+		</div>
+		<div data-bind="foreach: images">
+			<div data-bind="text: title"></div>
+			<img data-bind="attr: {src: url}"></img>
+		</div>
+		<button data-bind="click: downloadImages">Download Images</button>
+		<script src='//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js'></script>
+		<script>
+			requirejs.config({
+				"baseUrl": "js",
+				"paths": {
+					"jquery": "//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min",
+					"lodash": "//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min",
+					"knockout": "//cdnjs.cloudflare.com/ajax/libs/knockout/3.0.0/knockout-min"
+				}
+			});
+			requirejs(["app"]);
+		</script>
+	</body>
+</html>
